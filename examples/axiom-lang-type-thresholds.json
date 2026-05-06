@@ -1,0 +1,17 @@
+{
+  "repo": "axiom-lang-type-dock",
+  "thresholds": {
+    "signal": 4,
+    "slack": 1,
+    "confidence": 1,
+    "drag": 3,
+    "ship": 152,
+    "watch": 102
+  },
+  "terms": [
+    "IR pressure",
+    "lowering drift",
+    "stack depth",
+    "diagnostic reach"
+  ]
+}
