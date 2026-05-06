@@ -1,68 +1,40 @@
 # axiom-lang-type-dock
 
-`axiom-lang-type-dock` is a focused Julia codebase around create a Julia reference implementation for type workflows, centered on storage recovery, log and snapshot fixtures, and replay consistency checks. It is meant to be easy to inspect, run, and extend without a hosted service.
+`axiom-lang-type-dock` is a Julia project in compilers. Its focus is to create a Julia reference implementation for type workflows, centered on storage recovery, log and snapshot fixtures, and replay consistency checks.
 
-## Axiom Lang Type Dock Walkthrough
+## Why This Exists
 
-I would read the project from the outside in: command, fixture, model, then roadmap. That keeps the compilers idea grounded in files that can be checked locally.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how IR pressure and stack depth should influence a review result.
 
-## Reason For The Project
+## Axiom Lang Type Dock Review Notes
 
-The repository exists to keep a technical idea small enough to reason about. The implementation avoids external dependencies where possible, then uses fixtures to make changes easy to review.
+Start with `IR pressure` and `stack depth`. Those cases create the widest score spread in this repo, so they are the best quick check when the model changes.
 
 ## Capabilities
 
-- Models source form with deterministic scoring and explicit review decisions.
-- Uses fixture data to keep intermediate state changes visible in code review.
-- Includes extended examples for bytecode output, including `recovery` and `degraded`.
-- Documents evaluation checks tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
+- `fixtures/domain_review.csv` adds cases for IR pressure and lowering drift.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/axiom-lang-type-walkthrough.md` walks through the case spread.
+- The Julia code includes a review path for `IR pressure` and `stack depth`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## How It Is Put Together
+## Implementation Shape
 
-The interesting part is the boundary between accepted and reviewed scenarios. Extended examples sit near that boundary so future edits can show whether the model became more permissive or more cautious. The Julia project keeps the model in a small module with assertions in a local test script.
+The fixture data drives the tests. The code stays thin, while `metadata/domain-review.json` and `config/review-profile.json` explain what each case is meant to protect.
 
-## Where Things Live
+The added Julia path is deliberately direct, with fixtures doing most of the explaining.
 
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Getting It Running
-
-Use a normal shell with Julia available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Command Examples
+## Local Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Verification
 
-## Check The Work
+The verifier is intentionally local. It should fail if the fixture score math, lane assignment, or language-specific test drifts.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Roadmap
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Data Notes
-
-`baseline` is the first example I would inspect because it lands on the `review` path with a score of 115. The broader file also keeps `degraded` at -92 and `recovery` at 169, which gives the model a useful low-to-high spread.
-
-## Tradeoffs
-
-The scoring model is simple by design. More domain-specific behavior should be added through explicit adapters or extra fixture classes rather than hidden constants.
-
-## Possible Extensions
-
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add one more compilers fixture that focuses on a malformed or borderline input.
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.

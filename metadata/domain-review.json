@@ -1,0 +1,73 @@
+{
+  "repo": "axiom-lang-type-dock",
+  "language": "Julia",
+  "category": "Compilers",
+  "goal": "Create a Julia reference implementation for type workflows, centered on storage recovery, log and snapshot fixtures, and replay consistency checks.",
+  "review_model": {
+    "terms": [
+      "IR pressure",
+      "lowering drift",
+      "stack depth",
+      "diagnostic reach"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "IR pressure",
+      "signal": 72,
+      "slack": 53,
+      "drag": 11,
+      "confidence": 67,
+      "score": 231,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "lowering drift",
+      "signal": 52,
+      "slack": 46,
+      "drag": 27,
+      "confidence": 75,
+      "score": 144,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "stack depth",
+      "signal": 52,
+      "slack": 32,
+      "drag": 28,
+      "confidence": 90,
+      "score": 142,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "diagnostic reach",
+      "signal": 65,
+      "slack": 53,
+      "drag": 26,
+      "confidence": 93,
+      "score": 198,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "IR pressure",
+      "signal": 59,
+      "slack": 46,
+      "drag": 21,
+      "confidence": 82,
+      "score": 183,
+      "lane": "ship"
+    }
+  ]
+}
